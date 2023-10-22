@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/views/login_screen.dart';
+import 'package:pokedex/views/screens/login_screen.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
