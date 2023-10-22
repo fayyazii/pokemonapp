@@ -113,34 +113,14 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
           SizedBox(height: 20.sp,),
 
-          Container(
-            height: 40.sp,
-            width: 272.sp,
-
-            decoration: BoxDecoration(
-              //gradient: Constants.gradient,
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(20.sp)
-            ),
-            child: const Center(
-              child: Text("Signup",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.white
-                ),),
-            ),
-          ),
-          SizedBox(height: 20.sp,),
-
           BlocListener<SignupCubit, SignupState>(
             listener: (context, state) {
               // TODO: implement listener
               if(state is SignupSuccess){
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context)=>LoginScreeen()),
-                          (route) => false);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context)=>LoginScreeen()),
+                        (route) => false);
               }
             },
             child: GestureDetector(
@@ -157,7 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     borderRadius: BorderRadius.circular(20.sp)
                 ),
                 child: const Center(
-                  child: Text("Login",
+                  child: Text("Signup",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -167,6 +147,28 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
             ),
           ),
+          SizedBox(height: 20.sp,),
+          Container(
+            height: 40.sp,
+            width: 272.sp,
+
+            decoration: BoxDecoration(
+              //gradient: Constants.gradient,
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(20.sp)
+            ),
+            child: const Center(
+              child: Text("Login",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.white
+                ),),
+            ),
+          ),
+          SizedBox(height: 20.sp,),
+
+
         ],
       ),
     );
