@@ -10,7 +10,6 @@ class LoginRepo{
     try{
       var res=await auth.signInWithEmailAndPassword(email: email, password: password);
       if(res.user!=null){
-        var data=await store.collection("users").doc(res.user!.uid).get();
         return true;
       }
       throw FirebaseAuthException(code: "NOT_EXIST",message: "user may have been deleted");

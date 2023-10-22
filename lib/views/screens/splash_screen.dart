@@ -1,5 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pokedex/utils/hive_utils/hive_manager.dart';
 import 'package:pokedex/views/screens/login_screen.dart';
+import 'package:pokedex/views/screens/root_screen/pages/home_screen.dart';
+import 'package:pokedex/views/screens/root_screen/root_screen.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -10,33 +16,34 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FirebaseAuth.instance.currentUser != null
+                  ? RootScreen()
+                  : LoginScreeen()));
+    });
     super.initState();
-    navigatehome();
   }
-  navigatehome()async
-  {
-    await Future.delayed(Duration(milliseconds: 2000),(){});
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreeen()));
+
+  @override
+  void didChangeDependencies() async{
+    await HiveManager.init();
+    super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("SplashScreen"),
-      ),
-      body: const Column(
-        children: [
-          SizedBox(height: 100,),
-          Center(
-            child: Text("Welcome to the application",
-            style: TextStyle(
+      body:Center(
+        child: Text(
+          "Welcome to the application",
+          style: TextStyle(
               color: Colors.black,
-              fontSize: 24,
-              fontWeight: FontWeight.bold
-            ),),
-          )
-        ],
+              fontSize: 24.sp,
+              fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
