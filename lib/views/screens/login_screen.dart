@@ -26,7 +26,7 @@ class _LoginScreeenState extends State<LoginScreeen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login Screen"),
+        title: const Text("Login"),
       ),
       body: Form(
         key: _formkey,
@@ -56,21 +56,15 @@ class _LoginScreeenState extends State<LoginScreeen> {
               padding: EdgeInsets.symmetric(horizontal: 20.sp),
               child: TextFormField(
                 validator: (value){
-                  if (value==null)
+                  if (value==null ||  value.isEmpty)
                   {
                     return "field cannot be empty";
                   }
                 },
                 controller: txtEmail,
+
                 decoration: InputDecoration(
                   hintText: "Enter Email",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 1, //<-- SEE HERE
-                      color: Color(0xffACACAC),
-                    ),
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
                 ),
               ),
             ),
@@ -98,21 +92,15 @@ class _LoginScreeenState extends State<LoginScreeen> {
               padding: EdgeInsets.symmetric(horizontal: 20.sp),
               child: TextFormField(
                 validator: (value){
-                  if (value==null)
+                  if (value==null || value.isEmpty)
                     {
                       return "field cannot be empty";
                     }
                 },
                 controller: txtPass,
+                obscureText: true,
                 decoration: InputDecoration(
                   hintText: "Enter Password",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 1, //<-- SEE HERE
-                      color: Color(0xffACACAC),
-                    ),
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
                 ),
               ),
             ),
@@ -124,9 +112,10 @@ class _LoginScreeenState extends State<LoginScreeen> {
 
             BlocListener<SigninCubit, SigninState>(
               listener: (context, state) {
-                if (state is SignupError) {
+                if (state is SigninLoading) {
                   showDialog(
                     context: context,
+                    barrierDismissible: false,
                     builder: (context) =>  AlertDialog(
                       content: SizedBox(
                         height: 100.h,
@@ -137,6 +126,14 @@ class _LoginScreeenState extends State<LoginScreeen> {
                     ),
                   );
                 }
+                if(state is SigninFailed){
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.err),
+                    backgroundColor: Colors.red,
+                  ));
+                  log(state.err);
+                }
 
                 // TODO: implement listener
                 if(state is SigninSuccess){
@@ -145,14 +142,7 @@ class _LoginScreeenState extends State<LoginScreeen> {
                       MaterialPageRoute(builder: (context)=>RootScreen()),
                           (route) => false);
                 }
-                if(state is SigninFailed){
-                  //Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.err),
-                    backgroundColor: Colors.red,
-                  ));
-                  log(state.err);
-                }
+
               },
               child: GestureDetector(
                 onTap: () {

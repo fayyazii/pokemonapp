@@ -19,7 +19,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login Screen"),),
+      appBar: AppBar(title: Text("Signup"),),
       body: Form(
         key: _formkey,
         child: ListView(
@@ -42,20 +42,13 @@ class _SignupScreenState extends State<SignupScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20.sp),
               child: TextFormField(
                 validator: (value){
-                  if (value==null)
+                  if (value==null ||  value.isEmpty)
                   {
                     return "field cannot be empty";
                   }
                 },
                 decoration: InputDecoration(
                   hintText: "Enter Name",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                    const BorderSide(
-                      width: 1, //<-- SEE HERE
-                      color: Color(0xffACACAC),),
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
                 ),
               ),
             ),
@@ -77,7 +70,7 @@ class _SignupScreenState extends State<SignupScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20.sp),
               child: TextFormField(
                 validator: (value){
-                  if (value==null)
+                  if (value==null ||  value.isEmpty)
                   {
                     return "field cannot be empty";
                   }
@@ -85,13 +78,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 controller: txtEmail,
                 decoration: InputDecoration(
                   hintText: "Enter Email",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                    const BorderSide(
-                      width: 1, //<-- SEE HERE
-                      color: Color(0xffACACAC),),
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
                 ),
               ),
             ),
@@ -113,21 +99,15 @@ class _SignupScreenState extends State<SignupScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20.sp),
               child: TextFormField(
                 validator: (value){
-                  if (value==null)
+                  if (value==null ||  value.isEmpty)
                   {
                     return "field cannot be empty";
                   }
                 },
                 controller: txtPass,
+                obscureText: true,
                 decoration: InputDecoration(
                   hintText: "Enter Password",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                    const BorderSide(
-                      width: 1, //<-- SEE HERE
-                      color: Color(0xffACACAC),),
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
                 ),
               ),
             ),
@@ -135,7 +115,28 @@ class _SignupScreenState extends State<SignupScreen> {
 
             BlocListener<SignupCubit, SignupState>(
               listener: (context, state) {
-                // TODO: implement listener
+                if (state is SignupLoading) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) =>  AlertDialog(
+                      content: SizedBox(
+                        height: 100.h,
+                        child:const  Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                if(state is SignupError){
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.err),
+                    backgroundColor: Colors.red,
+                  ));
+
+                }
                 if(state is SignupSuccess){
                   Navigator.pushAndRemoveUntil(
                       context,
